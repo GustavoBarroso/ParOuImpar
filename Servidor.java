@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class Servidor {
     public static void main(String[] args) {
@@ -27,12 +28,36 @@ public class Servidor {
             PrintWriter escritor2 = new PrintWriter(jogador2.getOutputStream(), true);
 
             // Inicia o jogo
-            while (true) {
-                escritor1.println("Sua vez de escolher um número (0 a 5):");
-                int escolha1 = Integer.parseInt(leitor1.readLine());
 
-                escritor2.println("Sua vez de escolher um número (0 a 5):");
-                int escolha2 = Integer.parseInt(leitor2.readLine());
+
+            while (true) {
+
+                //Escolha aleatória de funções por rodada
+
+                Random random = new Random();
+                int numero = random.nextInt(2);
+                if(numero==0){
+                    escritor1.println("Nessa rodada, você será o par");
+                    escritor2.println("Nessa rodada, você será o ímpar");
+                } else {
+                    escritor1.println("Nessa rodada, você será o ímpar");
+                    escritor2.println("Nessa rodada, você será o par");
+                }
+
+                //Escolha do número
+
+                int escolha1;
+                do{
+                    escritor1.println("Sua vez de escolher um número (0 a 5):");
+                    escolha1 = Integer.parseInt(leitor1.readLine());
+                }while (escolha1 > 5 || escolha1 < 0);
+
+                int escolha2;
+                do{
+                    escritor2.println("Sua vez de escolher um número (0 a 5):");
+                    escolha2 = Integer.parseInt(leitor2.readLine());
+                }while (escolha2 > 5 || escolha2 < 0);
+
 
                 int soma = escolha1 + escolha2;
                 escritor1.println("A soma é: " + soma);
@@ -40,14 +65,25 @@ public class Servidor {
 
                 boolean par = soma % 2 == 0;
 
-                if(par == true){
-                    escritor1.println("Você venceu! A soma é par.");
-                    escritor2.println("Você perdeu! A soma é par.");
-                } else{
-                    escritor1.println("Você perdeu! A soma é ímpar.");
-                    escritor2.println("Você venceu! A soma é ímpar.");
-                }
+                //Resultado
 
+                if(par) {
+                    if (numero == 0) {
+                        escritor1.println("Você venceu! A soma é par.");
+                        escritor2.println("Você perdeu! A soma é par.");
+                    } else {
+                        escritor1.println("Você perdeu! A soma é par.");
+                        escritor2.println("Você venceu! A soma é par.");
+                    }
+                }else {
+                    if (numero == 0) {
+                        escritor1.println("Você perdeu! A soma é ímpar.");
+                        escritor2.println("Você venceu! A soma é ímpar.");
+                    } else {
+                        escritor1.println("Você venceu! A soma é ímpar.");
+                        escritor2.println("Você perdeu! A soma é ímpar.");
+                    }
+                }
 
                 escritor1.println("Fim do jogo. Deseja jogar novamente? (S/N)");
                 escritor2.println("Fim do jogo. Deseja jogar novamente? (S/N)");
